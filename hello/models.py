@@ -256,7 +256,7 @@ class Quiz13Bank(object):  # 이름, 입금, 출금만 구현
         while 1:
             menu = int(input('0.Exit 1.입금 2.출금 3.잔고 확인'))
             if menu == 0:
-                return
+                return f'종료'
             elif menu == 1:
                 self.save(int(input('입금할 금액을 입력하세요')))
             elif menu == 2:
@@ -266,7 +266,13 @@ class Quiz13Bank(object):  # 이름, 입금, 출금만 구현
 
 
 class Quiz14Gugudan(object):  # 책받침 구구단
-    def __init__(self):
-        pass
+    @staticmethod
+    def gugudan():
+        for i in range(2, 10, 4):
+            for j in range(1, 10):
+                for k in range(i, i+4):
+                    print(f'{k}*{j}={k*j}', end='\t')
+                print()
+            print('\n')
 
 
