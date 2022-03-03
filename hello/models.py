@@ -1,67 +1,6 @@
 import random
 
 
-def main():
-    while 1:
-        menu = input('0.Exit\n'
-                     '1.계산기\n'
-                     '2.BMI\n'
-                     '3.성적표\n'
-                     '4.성적표(Auto)\n'
-                     '5.주사위\n'
-                     '6.랜덤숫자\n'
-                     '7.랜덤이름\n'
-                     '8.가위바위보\n'
-                     '9.소수구하기\n'
-                     '10.윤년/평년\n'
-                     '11.숫자 맞추기\n'
-                     '12.로또\n'
-                     '13.은행\n'
-                     '14.구구단\n')
-        if menu == '0':
-            break
-        elif menu == '1':
-            q1 = Quiz01Calculator(int(input('첫 번째 숫자')), input('연산자'), int(input('두 번째 숫자')))
-            print(q1.calcRes())
-        elif menu == '2':
-            q2 = Quiz02Bmi(input('이름'), int(input('키')), int(input('몸무게')))
-            print(f'이름: {q2.name} 키: {q2.height} 몸무게: {q2.weight} BMI 지수: {q2.getBmi()}')
-        elif menu == '3':
-            q3 = Quiz03Grade(input('이름'), int(input('국어 점수')), int(input('영어 점수')), int(input('수학 점수')))
-            print(f'이름:{q3.name} 합계:{q3.sum()} 평균:{q3.avg():.2f} {q3.getGrade()}입니다.')
-        elif menu == '4':
-            q4 = Quiz04GradeAuto(input('이름'), int(input('국어 점수')), int(input('영어 점수')), int(input('수학 점수')))
-            for i in ['김지혜', '심민혜', '권솔이', '최은아', '하진희']:
-                print(i)
-        elif menu == '5':
-            print(f'결과: {Quiz05Dice.cast()}')
-        elif menu == '6':
-            q6 = Quiz06RandomGenerator(int(input('첫 숫자')), int(input('끝 숫자')))
-            print(f'결과: {q6.getNumber()}')
-        elif menu == '7':
-            q7 = Quiz07RandomChoice()
-            print(q7.chooseMember())
-        elif menu == '8':
-            q8 = Quiz08Rps(int(input('1.주먹 2.가위 3.보')))
-            print(q8.rsp())
-        elif menu == '9':
-            pass
-        elif menu == '10':
-            q10 = Quiz10LeapYear(int(input('연도를 입력하세요.')))
-            print(q10.leapYear())
-        elif menu == '11':
-            q11 = Quiz11NumberGolf()
-            print(q11.numberGolf())
-        elif menu == '12':
-            q12 = Quiz12Lotto()
-            print(q12.lotto())
-        elif menu == '13':
-            q13 = Quiz13Bank()
-            print(q13.bank())
-        else:
-            print('Wrong Number')
-
-
 class Quiz01Calculator:
     def __init__(self, num1, opcode, num2):
         self.num1 = num1
@@ -94,13 +33,10 @@ class Quiz01Calculator:
 
 
 class Quiz02Bmi:
-    def __init__(self, name, height, weight):
-        self.name = name
-        self.height = height
-        self.weight = weight
-
-    def getBmi(self):
-        b = self.weight / (self.height * self.height) * 10000
+    @staticmethod
+    def getBmi(member):
+        this = member
+        b = this.weight / (this.height * this.height) * 10000
         if b >= 35:
             res = '고도 비만'
         elif b >= 30:
@@ -226,16 +162,18 @@ class Quiz10LeapYear(object):
 
 
 class Quiz11NumberGolf(object):
+    def __init__(self):
+        self.num = 0
 
     def numberGolf(self):
         answer = myRandom(1, 100)
         count = 0
         while 1:
             count += 1
-            n = int(input('1~100사이의 정수 중 하나를 입력하세요.'))
-            if n > answer:
+            self.num = int(input('1~100사이의 정수 중 하나를 입력하세요.'))
+            if self.num > answer:
                 print('더 작은 값을 입력하세요.')
-            elif n < answer:
+            elif self.num < answer:
                 print('더 큰 값을 입력하세요.')
             else:
                 return f'{count}번째 시도. 정답입니다. '
@@ -244,12 +182,13 @@ class Quiz11NumberGolf(object):
 class Quiz12Lotto(object):
     def __init__(self):
         self.userNum = []
-        print('1~45까지의 숫자 중 6개를 입력하세요.')
-        for i in range(6):
-            self.userNum.append(int(input(str(i+1)+'번째 숫자를 입력하세요.')))
-        self.userNum.sort()  # 오름차순으로 정리
 
     def lotto(self):
+        print('1~45까지의 숫자 중 6개를 입력하세요.')
+        for i in range(6):
+            self.userNum.append(int(input(str(i + 1) + '번째 숫자를 입력하세요.')))
+        self.userNum.sort()  # 오름차순으로 정리
+
         lottoNum = []  # 당첨 번호 저장 리스트
         '''ran = set()  # 중복 값 삭제
         while len(ran) < 6:  # 문자열의 길이가 6개가 될 때까지
@@ -261,6 +200,8 @@ class Quiz12Lotto(object):
                 lottoNum.append(ran)  # 추출된 랜덤 값이 lottoNum에 없으면 추가
             if len(lottoNum) == 6:  # lottoNum이 6이 되면 break
                 break
+        self.userNum.sort()  # 오름차순으로 정리
+
         lottoNum.sort()  # 오름차순으로 정리
         count = 0
         for i in range(6):
@@ -286,20 +227,22 @@ class Quiz13Bank(object):  # 이름, 입금, 출금만 구현
         self.total += money
 
     def withdraw(self, money):
+        if money > self.total:
+            print('잔고가 부족합니다.')
+            return
         self.total -= money
 
     def bank(self):
         while 1:
             menu = int(input('0.Exit 1.입금 2.출금 3.잔고 확인'))
             if menu == 0:
-                break
+                return
             elif menu == 1:
                 self.save(int(input('입금할 금액을 입력하세요')))
             elif menu == 2:
                 self.withdraw(int(input('출금할 금액을 입력하세요')))
             elif menu == 3:
                 print(f'잔고: {self.total}원')
-            return f'총액: {self.total}'
 
 
 class Quiz14Gugudan(object):  # 책받침 구구단
@@ -307,5 +250,3 @@ class Quiz14Gugudan(object):  # 책받침 구구단
         pass
 
 
-if __name__ == '__main__':
-    main()
