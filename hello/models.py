@@ -145,7 +145,27 @@ class Quiz08Rps(object):
 
 class Quiz09GetPrime(object):
     def __init__(self):
-        pass
+        self.startNum = 0
+        self.endNum = 0
+
+    def get_prime(self):
+        self.startNum = int(input('첫 번째 숫자를 입력하세요.'))
+        self.endNum = int(input('두 번째 숫자를 입력하세요.'))
+        num1 = self.startNum
+        num2 = self.endNum
+        prime = []
+        count = 0
+
+        for i in range(num1, num2+1):
+            flag = 1
+            for j in range(2, i):
+                if i % j == 0:
+                    flag = 0
+                    break
+            if flag == 1:
+                prime.append(i)
+                count += 1
+        return f'{prime} 총 {count}개 입니다.'
 
 
 class Quiz10LeapYear(object):

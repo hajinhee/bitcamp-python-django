@@ -1,6 +1,6 @@
 from hello.domains import Member
 from hello.models import Quiz01Calculator, Quiz02Bmi, Quiz03Grade, Quiz04GradeAuto, Quiz05Dice, Quiz06RandomGenerator, \
-    Quiz07RandomChoice, Quiz08Rps, Quiz10LeapYear, Quiz11NumberGolf, Quiz12Lotto, Quiz13Bank
+    Quiz07RandomChoice, Quiz08Rps, Quiz10LeapYear, Quiz11NumberGolf, Quiz12Lotto, Quiz13Bank, Quiz09GetPrime
 
 if __name__ == '__main__':
     while 1:
@@ -51,7 +51,8 @@ if __name__ == '__main__':
             q8 = Quiz08Rps(int(input('1.주먹 2.가위 3.보')))
             print(q8.rsp())
         elif menu == '9':
-            pass
+            q9 = Quiz09GetPrime()
+            print(q9.get_prime())
         elif menu == '10':
             q10 = Quiz10LeapYear(int(input('연도를 입력하세요.')))
             print(q10.leapYear())
