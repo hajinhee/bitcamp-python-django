@@ -245,12 +245,15 @@ class Quiz13Bank(object):  # 이름, 입금, 출금만 구현
 
     def save(self, money):
         self.total += money
+        print(f'입금액:{money} 잔고:{self.total}')
 
     def withdraw(self, money):
         if money > self.total:
             print('잔고가 부족합니다.')
             return
         self.total -= money
+        print(f'출금액:{money} 잔고:{self.total}')
+
 
     def bank(self):
         while 1:

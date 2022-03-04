@@ -1,71 +1,122 @@
 from hello.domains import Member
-from hello.models import Quiz01Calculator, Quiz02Bmi, Quiz03Grade, Quiz04GradeAuto, Quiz05Dice, Quiz06RandomGenerator, \
-    Quiz07RandomChoice, Quiz08Rps, Quiz10LeapYear, Quiz11NumberGolf, Quiz12Lotto, Quiz13Bank, Quiz09GetPrime, \
-    Quiz14Gugudan
+from hello.domains import Member
+from hello.quiz00 import Quiz00
+from hello.quiz10 import Quiz10
+from hello.quiz20 import Quiz20
+from hello.quiz30 import Quiz30
+from hello.quiz40 import Quiz40
+
 
 if __name__ == '__main__':
+    q0 = Quiz00()
+    q1 = Quiz10()
+    q2 = Quiz20()
+    q3 = Quiz30()
+    q4 = Quiz40()
     while 1:
-        menu = input('0.Exit\n'
-                     '1.계산기\n'
-                     '2.BMI\n'
-                     '3.성적표\n'
-                     '4.성적표(Auto)\n'
-                     '5.주사위\n'
-                     '6.랜덤숫자\n'
-                     '7.랜덤이름\n'
-                     '8.가위바위보\n'
-                     '9.소수구하기\n'
-                     '10.윤년/평년\n'
-                     '11.숫자 맞추기\n'
-                     '12.로또\n'
-                     '13.은행\n'
-                     '14.구구단\n')
-        if menu == '0':
-            break
-        elif menu == '1':
-            q1 = Quiz01Calculator(int(input('첫 번째 숫자')), input('연산자'), int(input('두 번째 숫자')))
-            print(q1.calcRes())
-        elif menu == '2':
-            q2 = Quiz02Bmi()
-            member = Member()
-            member.name = input('이름: ')
-            member.height = float(input('키: '))
-            member.weight = float(input('몸무게: '))
-            res = q2.getBmi(member)
-            print(f'이름: {member.name} 키: {member.height} 몸무게: {member.weight} BMI 지수: {res}')
-        elif menu == '3':
-            q3 = Quiz03Grade(input('이름'), int(input('국어 점수')), int(input('영어 점수')), int(input('수학 점수')))
-            print(f'이름:{q3.name} 합계:{q3.sum()} 평균:{q3.avg():.2f} {q3.getGrade()}입니다.')
-        elif menu == '4':
-            q4 = Quiz04GradeAuto(input('이름'), int(input('국어 점수')), int(input('영어 점수')), int(input('수학 점수')))
-            for i in ['김지혜', '심민혜', '권솔이', '최은아', '하진희']:
-                print(i)
-        elif menu == '5':
-            print(f'결과: {Quiz05Dice.cast()}')
-        elif menu == '6':
-            q6 = Quiz06RandomGenerator(int(input('첫 숫자')), int(input('끝 숫자')))
-            print(f'결과: {q6.getNumber()}')
-        elif menu == '7':
-            q7 = Quiz07RandomChoice()
-            print(q7.chooseMember())
-        elif menu == '8':
-            q8 = Quiz08Rps(int(input('1.주먹 2.가위 3.보')))
-            print(q8.rsp())
-        elif menu == '9':
-            q9 = Quiz09GetPrime()
-            print(q9.get_prime())
+        menu = input("00.계산기 01.Bmi 02.주사위 03.가위바위보 04.윤년 05.성적표 06.멤버선택 07.로또 08.입출금 09.구구단"
+                     "10.버블 11.삽입 12.선택 13.퀵 14.병합 15.매직 16.지그재그 17.소수구하기 18.골프 19.예약"
+                     "20.리스트 21.튜플 22.딕셔너리 23 24 25 26 27 28 29"
+                     "30 31 32 33 34 35 36 37 38 39")
+        if menu == '00':
+            q0.quiz00calculator()
+        elif menu == '01':
+            q0.quiz01bmi()
+        elif menu == '02':
+            q0.quiz02dice()
+        elif menu == '03':
+            q0.quiz03rps()
+        elif menu == '04':
+            q0.quiz04leap()
+        elif menu == '05':
+            q0.quiz05grade()
+        elif menu == '06':
+            q0.quiz06memberChoice()
+        elif menu == '07':
+            q0.quiz07lotto()
+        elif menu == '08':
+            q0.quiz08bank()
+        elif menu == '09':
+            q0.quiz09gugudan()
         elif menu == '10':
-            q10 = Quiz10LeapYear(int(input('연도를 입력하세요.')))
-            print(q10.leapYear())
+            q1.quiz10bubble()
         elif menu == '11':
-            print(Quiz11NumberGolf().numberGolf())
+            q1.quiz11insertion()
         elif menu == '12':
-            print(Quiz12Lotto().lotto())
+            q1.quiz12selection()
         elif menu == '13':
-            q13 = Quiz13Bank()
-            print(q13.bank())
+            q1.quiz13quick()
         elif menu == '14':
-            q14 = Quiz14Gugudan()
-            q14.gugudan()
+            q1.quiz14merge()
+        elif menu == '15':
+            q1.quiz15magic()
+        elif menu == '16':
+            q1.quiz16zigzag()
+        elif menu == '17':
+            q1.quiz17prime()
+        elif menu == '18':
+            q1.quiz18golf()
+        elif menu == '19':
+            q1.quiz19booking()
+        elif menu == '20':
+            q2.quiz20list()
+        elif menu == '21':
+            q2.quiz21tuple()
+        elif menu == '22':
+            q2.quiz22dict()
+        elif menu == '23':
+            q2.quiz23listcom()
+        elif menu == '24':
+            q2.quiz24zip()
+        elif menu == '25':
+            q2.quiz25dictcom()
+        elif menu == '26':
+            q2.quiz26map()
+        elif menu == '27':
+            q2.quiz27()
+        elif menu == '28':
+            q2.quiz28()
+        elif menu == '29':
+            q2.quiz29()
+        elif menu == '30':
+            q2.quiz30()
+        elif menu == '31':
+            q2.quiz31()
+        elif menu == '32':
+            q2.quiz32()
+        elif menu == '33':
+            q2.quiz33()
+        elif menu == '34':
+            q2.quiz34()
+        elif menu == '35':
+            q2.quiz35()
+        elif menu == '36':
+            q2.quiz36()
+        elif menu == '37':
+            q2.quiz37()
+        elif menu == '38':
+            q2.quiz38()
+        elif menu == '39':
+            q2.quiz39()
+        elif menu == '40':
+            q4.quiz40()
+        elif menu == '41':
+            q4.quiz41()
+        elif menu == '42':
+            q4.quiz42()
+        elif menu == '43':
+            q4.quiz43()
+        elif menu == '44':
+            q4.quiz44()
+        elif menu == '45':
+            q4.quiz45()
+        elif menu == '46':
+            q4.quiz46()
+        elif menu == '47':
+            q4.quiz47()
+        elif menu == '48':
+            q4.quiz48()
+        elif menu == '49':
+            q4.quiz49()
         else:
-            print('Wrong Number')
+            break
