@@ -36,8 +36,7 @@ class Quiz00:
     def mod(self, a, b) -> float:
         return a % b
 
-
-    def quiz01bmi(self):
+    def quiz01bmi(self) -> float:
         this = Member()
         this.name = members()[myRandom(0, 23)]
         this.height = myRandom(150, 200)
@@ -104,7 +103,7 @@ class Quiz00:
 
     def quiz07lotto(self):
         '''ran = set()  # 중복 값 삭제
-        while len(ran) < 6:  # 문자열의 길이가 6개가 될 때까지
+            while len(ran) < 6:  # 문자열의 길이가 6개가 될 때까지
             ran.add(myRandom(1, 45))  # 중복 값을 제거하고 빈 공간에 6개 값이 모두 찰 때까지 랜덤 값 추가
             lottoNum = list(ran)  # 중복 없이 추출된 6개 숫자 리스트를 lottoNum에 저장'''
         lottoNum = []
@@ -139,7 +138,6 @@ class Quiz00:
         print(f'선택 번호:{userNum}\n당첨 번호:{lottoNum}\n{count}개 {res}')
         return None
 
-
     def quiz08bank(self):  # 이름, 입금, 출금만 구현
         name = members()[myRandom(0, 23)]
         money = myRandom(5000, 100000)
@@ -166,7 +164,6 @@ class Quiz00:
             total -= money
             res = f'출금액:{money} 잔고:{total}'
         return res
-
 
     def quiz09gugudan(self):  # 책받침구구단
         for i in range(2, 10, 4):

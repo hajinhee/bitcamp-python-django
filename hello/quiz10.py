@@ -20,8 +20,8 @@ class Quiz10:
     def quiz16zigzag(self) -> str: return None
 
     def quiz17prime(self) -> str:
-        num1 = myRandom(2, 100)
-        num2 = myRandom(2, 100)
+        num1 = myRandom(2, 50)
+        num2 = myRandom(51, 100)
         prime = []
         count = 0
         for i in range(num1, num2 + 1):
@@ -33,7 +33,7 @@ class Quiz10:
             if flag == 1:
                 prime.append(i)
                 count += 1
-        print(f'{prime} 총 {count}개 입니다.')
+        print(f'{num1}과 {num2} 사이의 소수는 {prime} 총 {count}개 입니다.')
         return None
 
     def quiz18golf(self) -> str:
@@ -43,11 +43,17 @@ class Quiz10:
         while 1:
             count += 1
             if num > answer:
-                print('더 작은 값을 입력하세요.')
+                print(num)
+                print('정답보다 큽니다. 더 작은 값이 출력됩니다.')
+                num = myRandom(1, num)
             elif num < answer:
-                print('더 큰 값을 입력하세요.')
+                print(num)
+                print('정답보다 작습니다. 더 큰 값이 출력됩니다.')
+                num = myRandom(num, 100)
             else:
-                print(f'{count}번째 시도. 정답입니다.')
+                print(f'정답:{answer} {count}번째에 맞췄습니다.')
+                break
+
         return None
 
     def quiz19booking(self) -> str: return None
