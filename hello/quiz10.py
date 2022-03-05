@@ -1,13 +1,13 @@
 import random
 
-from hello.domains import myRandom, members
+from hello.domains import myRandom, members, my100
 
 
 class Quiz10:
     def quiz10bubble(self) -> str:
         arr = []
         for i in range(0, 10):
-            ran = myRandom(1, 100)
+            ran = my100()
             if ran not in arr:
                 arr.append(ran)
 
@@ -21,7 +21,7 @@ class Quiz10:
     def quiz11insertion(self) -> str:
         arr = []
         for i in range(0, 10):
-            ran = myRandom(1, 100)
+            ran = my100()
             if ran not in arr:
                 arr.append(ran)
 
@@ -38,7 +38,7 @@ class Quiz10:
     def quiz12selection(self) -> str:
         arr = []
         for i in range(0, 10):
-            ran = myRandom(1, 100)
+            ran = my100()
             if ran not in arr:
                 arr.append(ran)
 
@@ -78,8 +78,8 @@ class Quiz10:
         return None
 
     def quiz18golf(self) -> str:
-        answer = myRandom(1, 100)
-        num = myRandom(1, 100)
+        answer = my100()
+        num = my100()
         count = 0
         while 1:
             count += 1

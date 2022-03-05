@@ -62,7 +62,7 @@ class Quiz00:
         return None
 
     def quiz03rps(self):
-        # 1 가위 2  바위 3 보
+        # 1.주먹 2.가위 3.보
         user = myRandom(1, 3)
         com = myRandom(1, 3)
         arr = ['', '주먹', '가위', '보']
@@ -78,9 +78,9 @@ class Quiz00:
 
     def quiz05grade(self):
         name = members()[myRandom(0, 23)]
-        kor = myRandom(0, 100)
-        eng = myRandom(0, 100)
-        math = myRandom(0, 100)
+        kor = my100()
+        eng = my100()
+        math = my100()
         sum = self.sum(kor, eng, math)
         avg = self.avg(sum)
         passChk = self.passChk(avg)
@@ -135,7 +135,8 @@ class Quiz00:
             res = '3등 당첨입니다.'
         else:
             res = '낙첨입니다.'
-        print(f'선택 번호:{userNum}\n당첨 번호:{lottoNum}\n{count}개 {res}')
+
+        print(f'선택 번호:{userNum}\n당첨 번호:{lottoNum}\n{count}개 맞았습니다. {res}')
         return None
 
     def quiz08bank(self):  # 이름, 입금, 출금만 구현
