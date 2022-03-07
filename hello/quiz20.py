@@ -80,7 +80,19 @@ class Quiz20:
 
         return None
 
-    def quiz23listcom(self) -> str: return None
+    def quiz23listcom(self) -> str:
+        print('--------Legacy--------')
+        a = []
+        for i in range(5):
+            a.append(i)
+        print(a)
+
+        print('-----Comprehension-----')
+        a2 = [i for i in range(5)]  # range(5) = 0~4
+        # 맨 앞의 i는 리턴 값
+        print(a2)
+
+        return None
 
     def quiz24zip(self) -> str: return None
 

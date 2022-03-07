@@ -7,7 +7,7 @@ class Quiz00:
         a = my100()
         b = my100()
         o = ['+', '-', '*', '/', '%']
-        op = o[myRandom(0, 4)]
+        op = o[myRandom(0, len(o))]  # 인덱싱
         if op == '+':
             res = f'{a} + {b} = {self.add(a, b)}'
         elif op == '-':
@@ -38,7 +38,7 @@ class Quiz00:
 
     def quiz01bmi(self) -> float:
         this = Member()
-        this.name = members()[myRandom(0, 23)]
+        this.name = members()[myRandom(0, len(members())-1)]
         this.height = myRandom(150, 200)
         this.weight = myRandom(50, 100)
         b = this.weight / (this.height * this.height) * 10000
@@ -72,12 +72,13 @@ class Quiz00:
         return None
 
     def quiz04leap(self):
-        y = myRandom(1, 5000)
+        y = myRandom(2000, 2022)
         print(f'{y}년은 윤년입니다.' if y % 4 == 0 and y % 100 != 0 or y % 400 == 0 else f'{y}년은 평년입니다.')
         return None
 
+
     def quiz05grade(self):
-        name = members()[myRandom(0, 23)]
+        name = members()[myRandom(0, len(members())-1)]
         kor = my100()
         eng = my100()
         math = my100()
@@ -98,7 +99,7 @@ class Quiz00:
 
 
     def quiz06memberChoice(self):
-        print(members()[(myRandom(0, 23))])
+        print(members()[(myRandom(0, len(members())-1))])
         return None
 
     def quiz07lotto(self):
@@ -140,7 +141,8 @@ class Quiz00:
         return None
 
     def quiz08bank(self):  # 이름, 입금, 출금만 구현
-        name = members()[myRandom(0, 23)]
+        '''print('-----------방법1-----------')
+        name = members()[myRandom(0, len(members())-1)]
         money = myRandom(5000, 100000)
         total = myRandom(50000, 1000000)
         while 1:
@@ -151,7 +153,8 @@ class Quiz00:
                 res = f'이름:{name}\n{self.withdraw(total, money)}'
             else:
                 break
-            print(res)
+            print(res)'''
+        Account.main()
         return None
 
     def save(self, total, money):
@@ -164,7 +167,8 @@ class Quiz00:
         else:
             total -= money
             res = f'출금액:{money} 잔고:{total}'
-        return res
+        print(res)
+        return None
 
     def quiz09gugudan(self):  # 책받침구구단
         for i in range(2, 10, 4):
@@ -173,3 +177,77 @@ class Quiz00:
                     print(f'{k}*{j}={k * j}', end='\t')
                 print()
             print('\n')
+
+
+'''
+[요구사항(REP)]
+은행이름은 비트은행
+입금자 이름(name), 계좌번호(account_number), 금액(money) 속성값으로 계좌 생성
+계좌 번호는 3자리-2자리-6자리 형태로 랜덤하게 생성된다.
+예를 들면 123-12-123456
+금액은 100만원 ~ 999만원 사이로 랜덤하게 입금된다.
+'''
+
+
+class Account(object):
+    def __init__(self, name, account_number, money):
+        self.BANK_NAME = '비트은행'
+        self.name = members()[myRandom(0, len(members())-1)] if name == None else name
+        self.money = myRandom(100, 999) if money == 0 else money
+        # 방법1 self.account_number = f'{myRandom(0, 999):0>3}-{myRandom(0, 99):0>2}-{myRandom(0, 99999):0>5}'
+        self.account_number = self.create_account_number() if account_number == None else account_number
+
+    def to_string(self):
+        return f'은행:{self.BANK_NAME} ' \
+               f'입금자:{self.name} ' \
+               f'계좌번호:{self.account_number} ' \
+               f'금액:{self.money}만원 ' \
+
+    def create_account_number(self):
+        '''
+        ls = [str(myRandom(0, 9)) for i in range(3)]
+        ls.append("-")
+        ls += [str(myRandom(0, 9)) for i in range(2)]
+        ls.append("-")
+        ls += [str(myRandom(0, 9)) for i in range(5)]
+        return "".join(ls)'''
+        # 방법2 return "".join([str(myRandom(0, 9)) if i != 3 and i != 6 else "-" for i in range(13)])
+        return "".join(["-" if i == 3 or i == 6 else str(myRandom(1, 9)) for i in range(13)])
+
+    def del_account(self, ls, account_number):
+        for i, j in enumerate(ls):   # i=index j=element
+            if j.account_number == account_number:
+                del ls[i]
+
+    @staticmethod
+    def main():
+        ls = []
+        while 1:
+            menu = input('0.종료 1.계좌개설 2.계좌목록 3.입금 4.출금 5.계좌해지')
+            if menu == '0':
+                break
+            elif menu == '1':
+                acc = Account(None, None, None)
+                print(f'{acc.to_string()} ... 개설되었습니다.')
+                ls.append(acc)
+            elif menu == '2':
+                a = "\n".join(i.to_string() for i in ls)  # i = element
+                print(a)
+            elif menu == '3':
+                account_number = input('입금할 계좌번호')
+                deposit = int(input('입금액'))
+                for i, j in enumerate(ls):
+                    if j.account_number == account_number:
+                        pass
+            elif menu == '4':
+                account_number = input('출금할 계좌번호')
+                money = input('출금액')
+            elif menu == '5':
+                account_number = input('해지할 계좌번호')
+            else:
+                print("Wrong Number.. Try Again")
+                continue
+
+
+
+
