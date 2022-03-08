@@ -1,4 +1,7 @@
 import random
+import urllib.request
+from urllib.request import urlopen
+from bs4 import BeautifulSoup
 
 
 class Quiz20:
@@ -91,16 +94,34 @@ class Quiz20:
         a2 = [i for i in range(5)]  # range(5) = 0~4
         # 맨 앞의 i는 리턴 값
         print(a2)
-
         return None
 
-    def quiz24zip(self) -> str: return None
+    def quiz24zip(self) -> str:
+        url = 'https://music.bugs.co.kr/chart/track/realtime/total'
+        html_doc = urlopen(url)
+        soup = BeautifulSoup(html_doc, 'lxml')  # 'html.parser' -> 'lxml' 로 업데이트
+
+        artists = soup.find_all("p", {'class': 'artist'})
+        a = ''.join([i.text for i in artists])
+        print(a)
+
+        # print(soup.prettify())
+        return None
 
     def quiz25dictcom(self) -> str: return None
 
     def quiz26map(self) -> str: return None
 
-    def quiz27(self) -> str: return None
+    def quiz27melon(self) -> str:
+        headers = {'User-Agent': 'Mozilla/5.0'}
+        url = 'https://www.melon.com/chart/index.htm?dayTime=2022030816'
+        req = urllib.request.Request(url, headers=headers)
+        soup = BeautifulSoup(urlopen(req), 'lxml')
+
+        songs = soup.find_all('div', {'class': 'ellipsis rank01'})
+        songs = [i for i in songs]
+        print(''.join(i.text for i in songs))
+        return None
 
     def quiz28(self) -> str: return None
 

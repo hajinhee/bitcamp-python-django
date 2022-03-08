@@ -154,6 +154,7 @@ class Quiz00:
             else:
                 break
             print(res)'''
+
         Account.main()
         return None
 
@@ -193,7 +194,7 @@ class Account(object):
     def __init__(self, name, account_number, money):
         self.BANK_NAME = '비트은행'
         self.name = members()[myRandom(0, len(members())-1)] if name == None else name
-        self.money = myRandom(100, 999) if money == 0 else money
+        self.money = myRandom(100, 999) if money == None else money
         # 방법1 self.account_number = f'{myRandom(0, 999):0>3}-{myRandom(0, 99):0>2}-{myRandom(0, 99999):0>5}'
         self.account_number = self.create_account_number() if account_number == None else account_number
 
@@ -214,7 +215,32 @@ class Account(object):
         # 방법2 return "".join([str(myRandom(0, 9)) if i != 3 and i != 6 else "-" for i in range(13)])
         return "".join(["-" if i == 3 or i == 6 else str(myRandom(1, 9)) for i in range(13)])
 
-    def del_account(self, ls, account_number):
+    @staticmethod
+    def deposit(ls, account_number, input_money):
+        for i, j in enumerate(ls):   # i=index j=element
+            if j.account_number == account_number:
+                j.money += input_money
+                a = ls[i]
+        return a
+
+    @staticmethod
+    def withdraw(ls, account_number, input_money):
+        for i, j in enumerate(ls):   # i=index j=element
+            if j.account_number == account_number:
+                j.money -= input_money
+                a = ls[i]
+                break
+        return a
+
+    @staticmethod
+    def find_account(ls, account_number):
+        ''''.join([j.to_string() if j.account_number == account_number else '찾는 계좌 아님' for i, j in enumerate(ls)])'''
+        for i, j in enumerate(ls):
+            if j.account_number == account_number:
+                return ls[i].to_string()
+
+    @staticmethod
+    def del_account(ls, account_number):
         for i, j in enumerate(ls):   # i=index j=element
             if j.account_number == account_number:
                 del ls[i]
@@ -223,7 +249,7 @@ class Account(object):
     def main():
         ls = []
         while 1:
-            menu = input('0.종료 1.계좌개설 2.계좌목록 3.입금 4.출금 5.계좌해지')
+            menu = input('0.종료 1.계좌개설 2.계좌목록 3.입금 4.출금 5.계좌해지 6.계좌조회')
             if menu == '0':
                 break
             elif menu == '1':
@@ -231,23 +257,21 @@ class Account(object):
                 print(f'{acc.to_string()} ... 개설되었습니다.')
                 ls.append(acc)
             elif menu == '2':
-                a = "\n".join(i.to_string() for i in ls)  # i = element
+                a = "\n".join(i.to_string() for i in ls)  # 변수 i에 ls의 element 하나를 담는 것
                 print(a)
             elif menu == '3':
-                account_number = input('입금할 계좌번호')
-                deposit = int(input('입금액'))
-                for i, j in enumerate(ls):
-                    if j.account_number == account_number:
-                        pass
+                a = Account.deposit(ls, input('입금할 계좌번호'), int(input('입금액')))
+                print(a.to_string())
             elif menu == '4':
-                account_number = input('출금할 계좌번호')
-                money = input('출금액')
+                a = Account.withdraw(ls, input('출금할 계좌번호'), int(input('출금액')))
+                print(a.to_string())
             elif menu == '5':
-                account_number = input('해지할 계좌번호')
+                Account.del_account(ls, input('해지할 계좌번호'))
+            elif menu == '6':
+                print(Account.find_account(ls, input('조회할 계좌번호')))
             else:
                 print("Wrong Number.. Try Again")
                 continue
-
 
 
 
