@@ -2,6 +2,7 @@ import random
 import urllib.request
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
+import pandas as pd
 
 
 class Quiz20:
@@ -92,31 +93,54 @@ class Quiz20:
 
         print('-----Comprehension-----')
         a2 = [i for i in range(5)]  # range(5) = 0~4
-        # 맨 앞의 i는 리턴 값
         print(a2)
         return None
 
-    @staticmethod
-    def quiz24zip() -> str:
+    def quiz24zip(self) -> {}:
         url = 'https://music.bugs.co.kr/chart/track/realtime/total'
         html_doc = urlopen(url)
-        soup = BeautifulSoup(html_doc, 'lxml')  # 'html.parser' -> 'lxml' 로 업데이트
-        # artists = soup.find_all("p", {'class': 'artist'})
-        # a = ''.join([i.text for i in artists])
-        # print(soup.prettify())
-        # titles = soup.find_all("p", {'class': 'title'})
-        # titles = [i.text for i in titles]
-        # print('\n'.join(i.text.strip() for i in titles))
-        for i, j in enumerate(['artist', 'title']):
-            # ls = [i for i in Quiz20.find(soup, j)]
-            print('\n\n\n'.join(i for i in Quiz20.find(soup, j)))
-        return None
+        soup = BeautifulSoup(html_doc, 'lxml')
+        ls1 = self.find(soup, 'title')
+        ls2 = self.find(soup, 'artist')
+        # self.dict1(ls1, ls2)
+        # self.dict2(ls1, ls2)
+        dict = {}
+        for i, j in zip(ls1, ls2):
+            dict[i] = j
+        print(dict)
+        return dict
 
     @staticmethod
-    def find(soup, a) -> str:
-        titles = soup.find_all("p", {'class': a})
+    def dict2(ls1, ls2) -> None:
+        dict = {}
+        for i, j in enumerate(ls1):
+            dict[j] = ls2[i]
+        print(dict)
+
+    @staticmethod
+    def dict1(ls1, ls2) -> None:
+        dict = {}
+        for i in range(0, len(ls1)):
+            dict[ls1[i]] = ls2[i]
+        print(dict)
+
+    def prin_music_list(self, soup) -> None:
+        artists = soup.find_all("p", {'class': 'artist'})
+        print(''.join([i.text for i in artists]))
+        print(soup.prettify())
+        titles = soup.find_all("p", {'class': 'title'})
         titles = [i.text for i in titles]
-        return titles
+        print('\n'.join(i.text.strip() for i in titles))
+
+    def find_rank(self, soup) -> None:
+        for i, j in enumerate(['artist', 'title']):
+            for i, j in Quiz20.find(soup, j):
+                print(f'{i}위: {j}')
+        print('#'*100)
+
+    @staticmethod
+    def find(soup, cls_name) -> []:
+        return [i.text for i in soup.find_all("p", {'class': cls_name})]
 
     def quiz25dictcom(self) -> str: return None
 
@@ -129,18 +153,13 @@ class Quiz20:
         soup = BeautifulSoup(urlopen(req), 'lxml')
         songs = soup.find_all('div', {'class': 'ellipsis rank01'})
         songs = [i for i in songs]
-        print('\n'.join(i.text.strip() for i in songs))
+        return '\n'.join(i.text.strip() for i in songs)
 
-        return None
-
-    def quiz28(self) -> str:
-        a = [i if i == 0 or i == 1 else i for i in range()]  # range() -> 수열(시퀀스)
-        b = [i if i == 0 or i == 1 else i for i in []]  # 자료구조(컬렉션) -> []리스트 , ()튜플, {}딕셔너리
-        # iterator -> default 값으로 element만 추출
-        c = [(i, j) for i, j in enumerate([])]
-        # enumeration -> index와 element 2개 추출
-        d = ''.join(i.text for i in [])
-        return None
+    def quiz28dataframe(self) -> None:
+        # dict = self.quiz24zip()    # quiz24zip 의 return 타입에 의해 딕셔너리가 됨
+        df = pd.DataFrame.from_dict(dict, orient='index')
+        print(df)
+        df.to_csv('./save/bugs.csv', sep=',', na_rep='NaN')
 
     def quiz29(self) -> str: return None
 
