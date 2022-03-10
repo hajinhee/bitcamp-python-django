@@ -107,16 +107,16 @@ class Quiz20:
         # titles = soup.find_all("p", {'class': 'title'})
         # titles = [i.text for i in titles]
         # print('\n'.join(i.text.strip() for i in titles))
-        print(Quiz20.aaa(soup, 'artist', 'title'))
+        for i, j in enumerate(['artist', 'title']):
+            # ls = [i for i in Quiz20.find(soup, j)]
+            print('\n\n\n'.join(i for i in Quiz20.find(soup, j)))
         return None
 
     @staticmethod
-    def aaa(soup, c, d) -> str:      # aaa에서는 soup이 아니라 다른 변수이름으로 설정해도 괜찮음
-        a = soup.find_all("p", {'class': [c, d]})
-        a = [i for i in a]
-        b = '\n'.join(i.text.strip() for i in a)
-        return b
-
+    def find(soup, a) -> str:
+        titles = soup.find_all("p", {'class': a})
+        titles = [i.text for i in titles]
+        return titles
 
     def quiz25dictcom(self) -> str: return None
 
@@ -139,6 +139,7 @@ class Quiz20:
         # iterator -> default 값으로 element만 추출
         c = [(i, j) for i, j in enumerate([])]
         # enumeration -> index와 element 2개 추출
+        d = ''.join(i.text for i in [])
         return None
 
     def quiz29(self) -> str: return None
