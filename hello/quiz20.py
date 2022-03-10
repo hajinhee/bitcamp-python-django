@@ -96,17 +96,27 @@ class Quiz20:
         print(a2)
         return None
 
-    def quiz24zip(self) -> str:
+    @staticmethod
+    def quiz24zip() -> str:
         url = 'https://music.bugs.co.kr/chart/track/realtime/total'
         html_doc = urlopen(url)
         soup = BeautifulSoup(html_doc, 'lxml')  # 'html.parser' -> 'lxml' 로 업데이트
-
-        artists = soup.find_all("p", {'class': 'artist'})
-        a = ''.join([i.text for i in artists])
-        print(a)
-
+        # artists = soup.find_all("p", {'class': 'artist'})
+        # a = ''.join([i.text for i in artists])
         # print(soup.prettify())
+        # titles = soup.find_all("p", {'class': 'title'})
+        # titles = [i.text for i in titles]
+        # print('\n'.join(i.text.strip() for i in titles))
+        print(Quiz20.aaa(soup, 'artist', 'title'))
         return None
+
+    @staticmethod
+    def aaa(soup, c, d) -> str:      # aaa에서는 soup이 아니라 다른 변수이름으로 설정해도 괜찮음
+        a = soup.find_all("p", {'class': [c, d]})
+        a = [i for i in a]
+        b = '\n'.join(i.text.strip() for i in a)
+        return b
+
 
     def quiz25dictcom(self) -> str: return None
 
@@ -117,13 +127,19 @@ class Quiz20:
         url = 'https://www.melon.com/chart/index.htm?dayTime=2022030816'
         req = urllib.request.Request(url, headers=headers)
         soup = BeautifulSoup(urlopen(req), 'lxml')
-
         songs = soup.find_all('div', {'class': 'ellipsis rank01'})
         songs = [i for i in songs]
-        print(''.join(i.text for i in songs))
+        print('\n'.join(i.text.strip() for i in songs))
+
         return None
 
-    def quiz28(self) -> str: return None
+    def quiz28(self) -> str:
+        a = [i if i == 0 or i == 1 else i for i in range()]  # range() -> 수열(시퀀스)
+        b = [i if i == 0 or i == 1 else i for i in []]  # 자료구조(컬렉션) -> []리스트 , ()튜플, {}딕셔너리
+        # iterator -> default 값으로 element만 추출
+        c = [(i, j) for i, j in enumerate([])]
+        # enumeration -> index와 element 2개 추출
+        return None
 
     def quiz29(self) -> str: return None
 
