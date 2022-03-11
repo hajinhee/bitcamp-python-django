@@ -100,8 +100,8 @@ class Quiz20:
         url = 'https://music.bugs.co.kr/chart/track/realtime/total'
         html_doc = urlopen(url)
         soup = BeautifulSoup(html_doc, 'lxml')
-        ls1 = self.find(soup, 'title')
-        ls2 = self.find(soup, 'artist')
+        ls1 = self.find(soup, 'p', 'title')
+        ls2 = self.find(soup, 'p', 'artist')
         # self.dict1(ls1, ls2)
         # self.dict2(ls1, ls2)
         dict = {}
@@ -124,7 +124,7 @@ class Quiz20:
             dict[ls1[i]] = ls2[i]
         print(dict)
 
-    def prin_music_list(self, soup) -> None:
+    def print_music_list(self, soup) -> None:
         artists = soup.find_all("p", {'class': 'artist'})
         print(''.join([i.text for i in artists]))
         print(soup.prettify())
@@ -134,26 +134,34 @@ class Quiz20:
 
     def find_rank(self, soup) -> None:
         for i, j in enumerate(['artist', 'title']):
-            for i, j in Quiz20.find(soup, j):
+            for i, j in enumerate(Quiz20.find(soup, 'p', j)):
                 print(f'{i}위: {j}')
         print('#'*100)
 
     @staticmethod
-    def find(soup, cls_name) -> []:
-        return [i.text for i in soup.find_all("p", {'class': cls_name})]
+    def find(soup, tag, cls_name) -> []:
+        return [i.text for i in soup.find_all(tag, {'class': cls_name})]
 
     def quiz25dictcom(self) -> str: return None
 
     def quiz26map(self) -> str: return None
 
-    def quiz27melon(self) -> str:
+    def quiz27melon(self) -> {}:
         headers = {'User-Agent': 'Mozilla/5.0'}
         url = 'https://www.melon.com/chart/index.htm?dayTime=2022030816'
         req = urllib.request.Request(url, headers=headers)
         soup = BeautifulSoup(urlopen(req), 'lxml')
-        songs = soup.find_all('div', {'class': 'ellipsis rank01'})
-        songs = [i for i in songs]
-        return '\n'.join(i.text.strip() for i in songs)
+        # songs = soup.find_all('div', {'class': 'ellipsis rank01'})
+        # songs = [i for i in songs]
+        ls1 = self.find(soup, 'div', 'ellipsis rank01')
+        ls2 = self.find(soup, 'div', 'ellipsis rank02')
+        # self.dict1(ls1, ls2)
+        # self.dict2(ls1, ls2)
+        dict = {}
+        for i, j in zip(ls1, ls2):
+            dict[i] = j
+        print(dict)
+        return dict
 
     def quiz28dataframe(self) -> None:
         # dict = self.quiz24zip()    # quiz24zip 의 return 타입에 의해 딕셔너리가 됨
