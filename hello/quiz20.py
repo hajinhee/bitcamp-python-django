@@ -202,9 +202,12 @@ class Quiz20:
         a = []  # 홀수
         b = []  # 짝수
         [a.append(i) if i % 2 != 0 else b.append(i) for i in range(1, 7)]
-
-        d1 = {'1': a, '2': b}
-        df = pd.DataFrame.from_dict(d1, orient='index', columns=[chr(i) for i in range(97, 100)])
+        # -----------------dict-----------------
+        d = {'1': a, '2': b}
+        df = pd.DataFrame.from_dict(d, orient='index', columns=[chr(i) for i in range(97, 100)])
         print(df)
-
+        print(f'*' * 30)
+        # -----------------list-----------------
+        df2 = pd.DataFrame([a, b], index=range(1, 3), columns=[chr(i) for i in range(97, 100)])
+        print(df2)
         return None

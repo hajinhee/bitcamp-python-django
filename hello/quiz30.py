@@ -23,8 +23,8 @@ class Quiz30:
         # l3 = [i for i in range(7, 10)]
         # l4 = [i for i in range(10, 13)]
         # l5 = [l1, l2, l3, l4]
-        list1 = [[i for i in range(j*3+1, j*3+4)] for j in range(4)]
-        df = pd.DataFrame(list1, index=range(1, 5), columns=['A', 'B', 'C'])
+        l6 = list([i for i in range(j*3+1, j*3+4)] for j in range(4))
+        df = pd.DataFrame(l6, index=range(1, 5), columns=['A', 'B', 'C'])
         ic(df)
         return None
 
@@ -38,8 +38,8 @@ class Quiz30:
     def quiz31_rand_2_by_3(self) -> str:
         # l1 = [myRandom(10, 100) for i in range(3)]
         # l2 = [myRandom(10, 100) for i in range(3)]
-        list1 = [[myRandom(10, 100) for i in range(3)] for i in range(2)]
-        df = pd.DataFrame(list1, index=range(2), columns=range(3))
+        l3 = list([myRandom(10, 99) for i in range(3)] for i in range(2))
+        df = pd.DataFrame(l3, index=range(2), columns=range(3))
         ic(df)
 
         return None
@@ -65,9 +65,8 @@ class Quiz30:
         # random.choice(string.ascii_letters) -> 대소문자 알파벳 중 하나 랜덤 선택
         students = [''.join(random.choice(string.ascii_letters) for i in range(5)) for i in range(10)]
         scores = [[myRandom(0, 100) for i in range(4)] for i in range(10)]
-        d = {i:j for i, j in zip(students, scores)}               # key='students', value='scores'
-        df = pd.DataFrame.from_dict(d, orient='index', columns=['국어', '영어', '수학', '사회'])
-        ic(df)
+        df = pd.DataFrame.from_dict(dict(zip(students, scores)), orient='index', columns=['국어', '영어', '수학', '사회'])
+        ic(df)                      # dict = {i:j for i, j in zip(students, scores)} -> key='students', value='scores'
         return None
 
     def quiz33(self) -> str: return None
