@@ -1,4 +1,5 @@
 import random
+import string
 import urllib.request
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
@@ -164,7 +165,8 @@ class Quiz20:
         print(dict)
         return None
 
-    def quiz26map(self) -> str: return None
+    def quiz26map(self) -> str:
+        return None
 
     def quiz27melon(self) -> {}:
         headers = {'User-Agent': 'Mozilla/5.0'}
@@ -184,10 +186,25 @@ class Quiz20:
         return dict
 
     def quiz28dataframe(self) -> None:
-        # dict = self.quiz24zip()    # quiz24zip 의 return 타입에 의해 딕셔너리가 됨
+        dict = self.quiz24zip()    # quiz24zip 의 return 타입에 의해 딕셔너리가 됨
         df = pd.DataFrame.from_dict(dict, orient='index')
         print(df)
         df.to_csv('./save/bugs.csv', sep=',', na_rep='NaN')
 
-    def quiz29(self) -> str: return None
 
+    '''
+    다음 결과 출력
+        a   b   c
+    1   1   3   5
+    2   2   4   6
+    '''
+    def quiz29_pandas_df(self) -> object:
+        a = []  # 홀수
+        b = []  # 짝수
+        [a.append(i) if i % 2 != 0 else b.append(i) for i in range(1, 7)]
+
+        d1 = {'1': a, '2': b}
+        df = pd.DataFrame.from_dict(d1, orient='index', columns=[chr(i) for i in range(97, 100)])
+        print(df)
+
+        return None

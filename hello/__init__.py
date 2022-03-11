@@ -19,7 +19,7 @@ if __name__ == '__main__':
                      "10.버블 11.삽입 12.선택 13.퀵 14.병합 15.매직\n"
                      "16.지그재그 17.소수구하기 18.골프 19.예약 \n"
                      "20.리스트 21.튜플 22.딕셔너리 23.컴프리 24.벅스(zip) 25 26 27.멜론 28 \n"
-                     "29 30 31 32 33 34 35 36 37 38 39")
+                     "29.DF생성 30 31 32 33 34 35 36 37 38 39")
         if menu == '00':
             q0.quiz00calculator()
         elif menu == '01':
@@ -79,27 +79,27 @@ if __name__ == '__main__':
         elif menu == '28':
             q2.quiz28dataframe()
         elif menu == '29':
-            q2.quiz29()
+            q2.quiz29_pandas_df()
         elif menu == '30':
-            q2.quiz30()
+            q3.quiz30_df_4_by_3()
         elif menu == '31':
-            q2.quiz31()
+            q3.quiz31_rand_2_by_3()
         elif menu == '32':
-            q2.quiz32()
+            q3.quiz32_df_grade()
         elif menu == '33':
-            q2.quiz33()
+            q3.quiz33()
         elif menu == '34':
-            q2.quiz34()
+            q3.quiz34()
         elif menu == '35':
-            q2.quiz35()
+            q3.quiz35()
         elif menu == '36':
-            q2.quiz36()
+            q3.quiz36()
         elif menu == '37':
-            q2.quiz37()
+            q3.quiz37()
         elif menu == '38':
-            q2.quiz38()
+            q3.quiz38()
         elif menu == '39':
-            q2.quiz39()
+            q3.quiz39()
         elif menu == '40':
             q4.quiz40()
         elif menu == '41':
