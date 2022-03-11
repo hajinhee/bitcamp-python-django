@@ -4,6 +4,9 @@ from urllib.request import urlopen
 from bs4 import BeautifulSoup
 import pandas as pd
 
+from hello import Quiz00
+from hello.domains import myRandom
+
 
 class Quiz20:
 
@@ -102,13 +105,21 @@ class Quiz20:
         soup = BeautifulSoup(html_doc, 'lxml')
         ls1 = self.find(soup, 'p', 'title')
         ls2 = self.find(soup, 'p', 'artist')
+        dt = {i:j for i, j in zip(ls1, ls2)}
+        l = [i + j for i, j in zip(ls1, ls2)]
+        l2 = list(zip(ls1, ls2))
+        d1 = dict(zip(ls1, ls2))  # 안에서 for loop 이 돌아가고 있음
+        print(dt)
         # self.dict1(ls1, ls2)
         # self.dict2(ls1, ls2)
+        return dt
+
+    @staticmethod
+    def dict3(ls1, ls2) -> None:
         dict = {}
         for i, j in zip(ls1, ls2):
             dict[i] = j
         print(dict)
-        return dict
 
     @staticmethod
     def dict2(ls1, ls2) -> None:
@@ -142,7 +153,16 @@ class Quiz20:
     def find(soup, tag, cls_name) -> []:
         return [i.text for i in soup.find_all(tag, {'class': cls_name})]
 
-    def quiz25dictcom(self) -> str: return None
+    def quiz25dictcom(self) -> str:
+        q = Quiz00
+        s = set([q.quiz06member_choice() for i in range(5)])      # {1, 2, 3} => set: 콤마, 중복이 제거된 값의 나열
+        while len(s) < 5:                                         # {'key':'value'} => dict: 콜론, 키와 밸류
+            s.add(q.quiz06member_choice())
+        students = list(s)
+        score = [myRandom(0, 100) for i in range(5)]
+        dict = {i:j for i, j in zip(students, score)}
+        print(dict)
+        return None
 
     def quiz26map(self) -> str: return None
 
@@ -154,7 +174,7 @@ class Quiz20:
         # songs = soup.find_all('div', {'class': 'ellipsis rank01'})
         # songs = [i for i in songs]
         ls1 = self.find(soup, 'div', 'ellipsis rank01')
-        ls2 = self.find(soup, 'div', 'ellipsis rank02')
+        ls2 = self.find(soup, 'span', 'checkEllipsis')
         # self.dict1(ls1, ls2)
         # self.dict2(ls1, ls2)
         dict = {}

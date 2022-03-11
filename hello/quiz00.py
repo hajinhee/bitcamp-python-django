@@ -97,10 +97,10 @@ class Quiz00:
     def passChk(self, avg):  # 60점이상이면 합격
         return '합격' if avg >= 60 else '불합격'
 
+    @staticmethod
+    def quiz06member_choice() -> str:
+        return members()[(myRandom(0, len(members())-1))]
 
-    def quiz06memberChoice(self):
-        print(members()[(myRandom(0, len(members())-1))])
-        return None
 
     def quiz07lotto(self):
         '''ran = set()  # 중복 값 삭제
