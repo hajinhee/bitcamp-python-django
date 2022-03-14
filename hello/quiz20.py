@@ -107,12 +107,8 @@ class Quiz20:
         ls1 = self.find(soup, 'p', 'title')
         ls2 = self.find(soup, 'p', 'artist')
         dt = {i:j for i, j in zip(ls1, ls2)}
-        l = [i + j for i, j in zip(ls1, ls2)]
-        l2 = list(zip(ls1, ls2))
         d1 = dict(zip(ls1, ls2))  # 안에서 for loop 이 돌아가고 있음
-        print(dt)
-        # self.dict1(ls1, ls2)
-        # self.dict2(ls1, ls2)
+        print(d1)
         return dt
 
     @staticmethod
@@ -161,11 +157,12 @@ class Quiz20:
             s.add(q.quiz06member_choice())
         students = list(s)
         score = [myRandom(0, 100) for i in range(5)]
-        dict = {i:j for i, j in zip(students, score)}
-        print(dict)
+        # dict = {i:j for i, j in zip(students, score)}
+        print(dict(zip(students, score)))
         return None
 
     def quiz26map(self) -> str:
+
         return None
 
     def quiz27melon(self) -> {}:
@@ -179,10 +176,10 @@ class Quiz20:
         ls2 = self.find(soup, 'span', 'checkEllipsis')
         # self.dict1(ls1, ls2)
         # self.dict2(ls1, ls2)
-        dict = {}
+        '''dict = {}
         for i, j in zip(ls1, ls2):
-            dict[i] = j
-        print(dict)
+            dict[i] = j'''
+        print(dict(zip(ls1, ls2)))
         return dict
 
     def quiz28dataframe(self) -> None:
@@ -190,24 +187,49 @@ class Quiz20:
         df = pd.DataFrame.from_dict(dict, orient='index')
         print(df)
         df.to_csv('./save/bugs.csv', sep=',', na_rep='NaN')
-
-
-    '''
-    다음 결과 출력
-        a   b   c
-    1   1   3   5
-    2   2   4   6
-    '''
+        '''
+        다음 결과 출력
+            a   b   c
+        1   1   3   5
+        2   2   4   6
+        '''
     def quiz29_pandas_df(self) -> object:
-        a = []  # 홀수
-        b = []  # 짝수
-        [a.append(i) if i % 2 != 0 else b.append(i) for i in range(1, 7)]
+        odds = []  # 홀수
+        evens = []  # 짝수
+        columns = [chr(i) for i in range(97, 100)]
+        [odds.append(i) if i % 2 != 0 else evens.append(i) for i in range(1, 7)]
         # -----------------dict-----------------
-        d = {'1': a, '2': b}
-        df = pd.DataFrame.from_dict(d, orient='index', columns=[chr(i) for i in range(97, 100)])
+        c = ['1', '2']
+        d = [odds, evens]
+        df = pd.DataFrame.from_dict(dict(zip(c, d)), orient='index', columns=columns)
         print(df)
         print(f'*' * 30)
+        '''
+           a  b  c
+        1  1  3  5
+        2  2  4  6
+        '''
         # -----------------list-----------------
-        df2 = pd.DataFrame([a, b], index=range(1, 3), columns=[chr(i) for i in range(97, 100)])
+        df2 = pd.DataFrame([odds, evens], index=range(1, 3), columns=columns)
         print(df2)
+        '''
+           a  b  c
+        1  1  3  5
+        2  2  4  6
+        '''
+        df3 = pd.DataFrame.from_dict(dict(zip(c, d)))  # 아무 표시를 하지 않으면 defaul key는 columns가 된다.
+        print(df3)
+        '''
+           1  2
+        0  1  2
+        1  3  4
+        2  5  6
+        '''
+        df4 = pd.DataFrame.from_dict(dict(zip(c, d)), orient='index')  # 인덱스를 key로 설정하려면 orient를 index로 설정한다.
+        print(df4)
+        '''
+           0  1  2
+        1  1  3  5
+        2  2  4  6
+        '''
         return None

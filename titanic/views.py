@@ -1,5 +1,5 @@
-from models import Model
-from domains import Dataset
+from titanic.models import Model
+from titanic.domains import Dataset
 
 
 class View:
