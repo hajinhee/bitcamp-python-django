@@ -5,9 +5,8 @@ import numpy as np
 import pandas as pd
 from icecream import ic
 
-from hello import Quiz00
-from hello.domains import myRandom, members
-from titanic.models import Model
+from hello.domains import members
+from context.models import Model
 
 class Quiz30:
     '''
@@ -90,10 +89,29 @@ class Quiz30:
                            vals=np.random.randint(0, 100, 4),
                            len=3)
         # ic(df)
-        df = pd.DataFrame.from_dict(dict(zip(members(), np.random.randint(0, 100, (24, 4)))), orient='index', columns=['자바', '파이썬', '자바스크립트', 'SQL'])
+        subjects = ['자바', '파이썬', '자바스크립트', 'SQL']
+        scores = np.random.randint(0, 100, (24, 4))
+        students = members()
+        students_scores = {students: scores for students, scores in zip(students, scores)}  # dict(zip(students, scores))
+        df = pd.DataFrame.from_dict(students_scores, orient='index', columns=subjects)
         # ic(df)
-        grade_df = Model().new_model('grade.csv')
-        ic(grade_df)
+        model = Model()
+        grade_df = model.new_model(fname='grade.csv')
+
+        print('Q1. 파이썬의 점수만 출력하시오')
+        python_scores = grade_df.loc[:, '파이썬']
+        print(type(python_scores))       # Series => indexing
+        ic(python_scores)
+
+        print('Q2. 조현국의 점수만 출력하시오')
+        cho_scores = grade_df.loc['조현국']
+        print(type(cho_scores))          # Series => indexing
+        ic(cho_scores)
+
+        print('Q3. 조현국의 과목별 점수를 출력하시오')
+        cho_subjects_scores = grade_df.loc[['조현국']]
+        print(type(cho_subjects_scores))  # DataFrame => slicing
+        ic(cho_subjects_scores)
         return None
 
     @staticmethod
