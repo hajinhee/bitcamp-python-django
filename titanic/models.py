@@ -4,9 +4,10 @@ from context.models import Model
 
 
 class TitanicModel(object):
+    model = Model()  # Model()과 Dataset() => 부모
+    dataset = Dataset()  # TitanicModel => 자식
+
     def __init__(self, train_fname, test_fname):
-        self.model = Model()
-        self.dataset = Dataset()
         self.train = self.model.new_model(train_fname)
         self.test = self.model.new_model(test_fname)
         # id 추출
@@ -14,62 +15,62 @@ class TitanicModel(object):
         ic(f'트레인 헤드 {self.train.head()}')
         ic(self.train)
 
-    def preprocess(self):
-        self.ticket_garbage()
-        self.cabin_garbage()
-        self.sib_sp_garbage()
-        self.parch_garbage()
+    def preprocess(self) -> object:        # Hook : __init__ 과는 결합도를 높이고 나머지 메소드와는 결합도를 낮춘다.
+        df = self.train                    # 같은 업무를 할 때 묶어서(결합도↑) 실행 한다.
+        df = self.drop_feature(df)
+        df = self.create_label(df)
+        df = self.create_train(df)
+        df = self.name_nominal(df)
+        df = self.age_ratio(df)
+        df = self.sex_nominal(df)
+        df = self.embarked_nominal(df)
+        df = self.pclass_ordinal(df)
+        df = self.fare_ratio(df)
+        return df
 
-        self.create_label()
-        self.create_train()
+    def drop_feature(self, df) -> object:   # Hook
+        '''
+        df = self.sib_sp_garbage(df)
+        df = self.parch_garbage(df)
+        df = self.ticket_garbage(df)
+        df = self.cabin_garbage(df)
+        '''
+        return df
 
-        self.embarked_nominal()
-        self.name_nominal()
-        self.age_ratio()
-        self.sex_nominal()
-        self.pclass_ordinal()
-        self.fare_ratio()
+    @staticmethod                           # 결합도(연관관계)를 낮추고 응집도를 높일 때 사용한다.
+    def create_label(df) -> object:
+        return df
 
-    def create_label(self) -> object:
-        pass
-
-    def create_train(self) -> object:
-        pass
-
-    def drop_feature(self) -> object:
-        pass
+    @staticmethod
+    def create_train(df) -> object:
+        return df
 
     '''
     Categorical vs. Quantitative
     Cate -> nominal(이름) vs. ordinal(순서)
     Quan -> interval(상대적) vs. ratio(절대적)
     '''
-    def pclass_ordinal(self) -> object:  # 순서가 있고 1, 2, 3 으로 끊어져 있음
-        pass
 
-    def name_nominal(self) -> object:  # 이름 앞에 계급이 없으면 불필요한 데이터
-        pass
+    @staticmethod
+    def pclass_ordinal(df) -> object:
+        return df
 
-    def sex_nominal(self) -> object:
-        pass
+    @staticmethod
+    def name_nominal(df) -> object:
+        return df
 
-    def age_ratio(self) -> object:
-        pass
+    @staticmethod
+    def sex_nominal(df) -> object:
+        return df
 
-    def sib_sp_garbage(self) -> object:
-        pass
+    @staticmethod
+    def age_ratio(df) -> object:
+        return df
 
-    def parch_garbage(self) -> object:
-        self.drop_feature()
+    @staticmethod
+    def fare_ratio(df) -> object:
+        return df
 
-    def ticket_garbage(self) -> object:
-        self.drop_feature()
-
-    def fare_ratio(self) -> object:
-        pass
-
-    def cabin_garbage(self) -> object:
-        self.drop_feature()
-
-    def embarked_nominal(self) -> object:
-        pass
+    @staticmethod
+    def embarked_nominal(df) -> object:
+        return df
