@@ -10,10 +10,12 @@ if __name__ == '__main__':
         if menu == '1':
             print(' #### 1.템플릿 ####')
             template = TitanicTemplate(train_fname='train.csv')
+            template.visualize()
             break
         elif menu == '2':
             print(' #### 2.전처리 ####')
-            model = TitanicModel(train_fname='train.csv', test_fname='test.csv')
+            model = TitanicModel()
+            model.preprocess(train_fname='train.csv', test_fname='test.csv')
             break
         else:
             break
