@@ -14,10 +14,11 @@ class TitanicModel(object):
         this.test = that.new_dframe(test_fname)
         this.id = this.test['PassengerId']
         this.label = this.train['Survived']
-        this.train = this.train.drop('Survived', axis=1)  # axis = 축의 방향, 1=column, 0=row
+        this.train.drop('Survived', axis=1, inplace=True)  # axis = 축의 방향, 1=column, 0=row
         this = self.drop_feature(this, 'SibSp', 'Parch', 'Ticket', 'Cabin')
         '''
         this = self.create_train(this)
+        this = self.create_label(this)
         this = self.name_nominal(this)
         this = self.age_ratio(this)
         this = self.sex_nominal(this)
@@ -42,15 +43,8 @@ class TitanicModel(object):
         ic(f'9. id 의 타입 {type(this.id[:10])}\n')
         print('*' * 100)
 
-    def create_this(self, dataset) ->object:
-        this = dataset
-        this.train = self.train  # DF = object
-        this.test = self.test    # DF = object
-        this.id = self.id        # Series
-        return this
-
     @staticmethod
-    def drop_feature(this, *feature) -> object:   # Asterisk(*): 여러 개의 인자 값을 한 번에 받음
+    def drop_feature(this, *feature) -> object:  # Asterisk(*): 여러 개의 인자 값을 tuple 형태로 한 번에 받음
         # for i in feature:
         #     this.train.drop(i, axis=1, inplace=True)
         #     this.test.drop(i, axis=1, inplace=True)
@@ -58,10 +52,7 @@ class TitanicModel(object):
         # [i.drop(j, axis=1, inplace=True) for i in [this.train, this.test] for j in feature]
         # inplace: 값을 다시 할당하지 않아도 바로 삭제
         [i.drop(list(feature), axis=1, inplace=True) for i in [this.train, this.test]]
-        return this
-
-    @staticmethod
-    def create_train(this) -> object:
+        # axis => 축의 방향 1 = column, 0 = row
         return this
 
     '''

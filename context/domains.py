@@ -1,4 +1,4 @@
-# context, fname, train, test, id, label
+# dname, sname, fname, train, test, id, label
 from dataclasses import dataclass
 
 
