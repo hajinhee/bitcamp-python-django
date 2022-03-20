@@ -9,16 +9,17 @@ class TitanicModel(object):
     model = Model()
     dataset = Dataset()
 
-    def preprocess(self, train_fname, test_fname) -> object:        # Hook : __init__ 과는 결합도를 높이고 나머지 메소드와는 결합도를 낮춘다.
+    def preprocess(self, train_fname, test_fname) -> object:    # Hook : __init__ 과는 결합도를 높이고 나머지 메소드와는 결합도를 낮춘다.
         this = self.dataset
         that = self.model
-        feature = ['PassengerId', 'Survived', 'Pclass', 'Name', 'Sex', 'Age', 'SibSp', 'Parch', 'Ticket', 'Fare', 'Cabin', 'Embarked']
+        feature = ['PassengerId', 'Survived', 'Pclass', 'Name', 'Sex', 'Age',
+                   'SibSp', 'Parch', 'Ticket', 'Fare', 'Cabin', 'Embarked']
         this.train = that.new_dframe(train_fname)
         this.test = that.new_dframe(test_fname)
-        this.id = this.test['PassengerId']
-        this.label = this.train['Survived']
+        this.id = this.test['PassengerId']   # id = 문제
+        this.label = this.train['Survived']  # label = 정답
         this.train.drop('Survived', axis=1, inplace=True)  # axis = 축의 방향, 1=column, 0=row
-        this = self.drop_feature(this, 'SibSp', 'Parch', 'Ticket', 'Cabin')
+        this = self.drop_feature(this, 'SibSp', 'Parch', 'Ticket', 'Cabin')  # garbage 삭제
         this = self.extract_title_from_name(this)
         title_mapping = self.remove_duplicate(this)
         this = self.title_nominal(this, title_mapping)
@@ -47,22 +48,22 @@ class TitanicModel(object):
         return this
 
     @staticmethod
-    def df_info(this):
-        [print(f'{i.info()}') for i in [this.train, this.test]]
-        ic(this.train.head(3))
-        ic(this.test.head(3))
+    def df_info(this) -> None:
+        [print(f'{i.info()}') for i in [this.train, this.test]]  # columns, null-count, Dtype
+        ic(this.train.head(5))
+        ic(this.test.head(5))
 
     @staticmethod
-    def null_check(this):
+    def null_check(this) -> None:
         [ic(f'{i.isnull().sum()}') for i in [this.train, this.test]]
 
     @staticmethod
-    def id_info(this):
+    def id_info(this) -> None:
         ic(f'id 의 타입  {type(this.id)}')
         ic(f'id 의 상위 3개 {this.id[:3]}')
 
     @staticmethod
-    def print_this(this):
+    def print_this(this) -> None:
         print('*'*100)
         ic(f'1. Train 의 타입 : {type(this.train)}\n')        # this.train, this.test, this.id = 객체, property => 앞으로 가공할거라
         ic(f'2. Train 의 컬럼 : {this.train.columns}\n')
@@ -81,9 +82,7 @@ class TitanicModel(object):
         #     this.train.drop(i, axis=1, inplace=True)
         #     this.test.drop(i, axis=1, inplace=True)
         # [i.drop(j, axis=1, inplace=True) for j in feature for i in [this.train, this.test]]
-
         [i.drop(list(feature), axis=1, inplace=True) for i in [this.train, this.test]]
-
         return this
 
     @staticmethod
@@ -104,16 +103,17 @@ class TitanicModel(object):
     def extract_title_from_name(this) -> None:  # train, test => df(object)
         for these in [this.train, this.test]:
             these['Title'] = these.Name.str.extract('([A-Za-z]+)\.', expand=False)  # 정규식
-        # ic(this.train.head(5))
         return this
 
     @staticmethod
-    def remove_duplicate(this) -> None:
+    def remove_duplicate(this) -> dict:    # 실제로 삭제 하는 게 아니라 어떤 신분이 있는 지 확인만!
         a = []
         for these in [this.train, this.test]:
-            a += list(set(these['Title']))
-        a = list(set(a))
+            a += list(set(these['Title']))  # Train과 Test 각각 중복 제거
+        a = list(set(a))  # 2개 파일의 중복 제거
         # print(f'>>> {a}')
+        # [these.drop_duplicates(subset=['Title'], inplace=True) for these in [this.train, this.test]]
+        # ↑ 실제로 컬럼에 있는 중복 값들을 모두 제거 하는 함수
         '''
         ['Mr', 'Sir', 'Major', 'Don', 'Rev', 'Countess', 'Lady', 'Jonkheer', 'Dr',
         'Miss', 'Col', 'Ms', 'Dona', 'Mlle', 'Mme', 'Mrs', 'Master', 'Capt']
@@ -128,15 +128,15 @@ class TitanicModel(object):
         return title_mapping
 
     @staticmethod
-    def title_nominal(this, title_mapping) -> object:   # title_mapping 은 외부(preprocess)에 있어서 파라미터로 받음
-        for these in [this.train, this.test]:
+    def title_nominal(this, title_mapping) -> object:   
+        for these in [this.train, this.test]:         # replace: 컬럼 내의 일부 단어를 바꿀 때 사용
             these['Title'] = these['Title'].replace(['Countess', 'Lady', 'Sir'], 'Royal')
             these['Title'] = these['Title'].replace(['Capt', 'Col', 'Don', 'Dr', 'Major', 'Rev', 'Jonkheer', 'Dona', 'Mme'], 'Rare')
             these['Title'] = these['Title'].replace(['Mlle'], 'Mr')
             these['Title'] = these['Title'].replace(['Miss'], 'Ms')
-            # Master 는 변화없음
-            # Mrs 는 변화없음
-            these['Title'] = these['Title'].fillna(0)  # NaN 값(노동자 계급)을 채우는
+            # Master 는 변화 없음
+            # Mrs 는 변화 없음
+            these['Title'] = these['Title'].fillna(0)  # 결측치(NaN)는 노동자 계급으로
             these['Title'] = these['Title'].map(title_mapping)  # 자연어를 기계어로 변환
         return this
 
@@ -149,28 +149,24 @@ class TitanicModel(object):
 
     @staticmethod
     def age_ratio(this) -> object:
-        train = this.train
-        test = this.test
         age_mapping = {'Unknown': 0, 'Baby': 1, 'Child': 2, 'Teenager': 3, 'Student': 4,
-                       'Young Adult': 5, 'Adult': 6,  'Senior': 7}
-        train['Age'] = train['Age'].fillna(-0.5)
-        test['Age'] = test['Age'].fillna(-0.5)         # -1 ~ 0 사이의 수로 만들어서 'NaN' => 'Unknown' 만들기 위해
-        bins = [-1, 0, 5, 12, 18, 24, 35, 60, np.inf]  # np.inf
+                       'Young Adult': 5, 'Adult': 6, 'Senior': 7}
+        bins = [-1, 0, 5, 12, 18, 24, 35, 60, np.inf]
         labels = ['Unknown', 'Baby', 'Child', 'Teenager', 'Student', 'Young Adult', 'Adult', 'Senior']
-        for these in train, test:
-            these['AgeGroup'] = pd.cut(these['Age'], bins, labels=labels)  # pd.cut() 사용
-            these['AgeGroup'] = these['AgeGroup'].map(age_mapping)  # map 사용
+        for these in [this.train, this.test]:
+            these['Age'] = these['Age'].fillna(-0.5)  # 결측치(누락 데이터/NaN) 치환 처리
+            these['AgeGroup'] = pd.cut(these['Age'], bins, labels=labels)
+            these['AgeGroup'] = these['AgeGroup'].map(age_mapping)
         return this
 
     @staticmethod
     def fare_ratio(this) -> object:
         fare_mapping = {'1등급': 1, '2등급': 2, '3등급': 3, '4등급': 4}
-        this.train['Fare'] = this.train['Fare'].fillna(1)
-        this.test['Fare'] = this.test['Fare'].fillna(1)
-        # print(f'qcut 으로 bins 값 설정 {this.train["FareBand"].head()}')
-        # bins = [-0.001, 7.91, 14.454, 31.0, np.inf]
         labels = ['4등급', '3등급', '2등급', '1등급']
+        # these['Fare'] = these['Fare'].fillna(1)  # 결측치는 '4등급'으로
+        # these['Fare'] = these['Fare'].fillna(1)
         for these in this.train, this.test:
+            these['Fare'] = these['Fare'].fillna(1)
             these['FareBand'] = pd.qcut(these['Fare'], 4, labels=labels)
             these['FareBand'] = these['FareBand'].map(fare_mapping)
         return this
