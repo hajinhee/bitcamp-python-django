@@ -36,7 +36,7 @@ class TitanicModel(object):
         this = self.drop_feature(this, 'Fare')
         k_fold = self.create_k_fold()
         accuracy = self.get_accuracy(this, k_fold)
-        print(accuracy)
+        ic(accuracy)
         '''
         this = self.create_train(this)
         this = self.create_label(this)
@@ -51,6 +51,19 @@ class TitanicModel(object):
         # self.name_nominal(this)
         # self.df_info(this)
         return this
+
+    def learning(self, train_fname, test_fname):
+        this = self.preprocess(train_fname, test_fname)
+        k_fold = self.create_k_fold()
+        ic(f'사이킷런 알고리즘 정확도: {self.get_accuracy(this, k_fold)}')
+        self.submit(this)
+
+    @staticmethod
+    def submit(this):
+        clf = RandomForestClassifier()
+        clf.fit(this.train, this.label)
+        prediction = clf.predict(this.test)
+        pd.DataFrame({'PassengerId': this.id, 'Survived': prediction}).to_csv('./save/submission.csv', index=False)
 
     @staticmethod
     def df_info(this) -> None:
@@ -105,7 +118,7 @@ class TitanicModel(object):
         return this
 
     @staticmethod
-    def extract_title_from_name(this) -> None:  # train, test => df(object)
+    def extract_title_from_name(this) -> object:  # train, test => df(object)
         for these in [this.train, this.test]:
             these['Title'] = these.Name.str.extract('([A-Za-z]+)\.', expand=False)  # 정규식
         return this
@@ -189,5 +202,3 @@ class TitanicModel(object):
     def get_accuracy(this, k_fold):
         score = cross_val_score(RandomForestClassifier(), this.train, this.label, cv=k_fold, n_jobs=1, scoring='accuracy')
         return round(np.mean(score)*100, 2)  # *백분률, 평균
-
-
