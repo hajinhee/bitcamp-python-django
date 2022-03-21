@@ -3,6 +3,9 @@ import pandas as pd
 from icecream import ic
 from context.domains import Dataset
 from context.models import Model
+from sklearn.model_selection import KFold
+from sklearn.model_selection import cross_val_score
+from sklearn.ensemble import RandomForestClassifier  #분류기
 
 
 class TitanicModel(object):
@@ -31,7 +34,9 @@ class TitanicModel(object):
         this = self.drop_feature(this, 'Age')
         this = self.fare_ratio(this)
         this = self.drop_feature(this, 'Fare')
-
+        k_fold = self.create_k_fold()
+        accuracy = self.get_accuracy(this, k_fold)
+        print(accuracy)
         '''
         this = self.create_train(this)
         this = self.create_label(this)
@@ -44,7 +49,7 @@ class TitanicModel(object):
         '''
         # self.kwargs_sample(name='이순신')
         # self.name_nominal(this)
-        self.df_info(this)
+        # self.df_info(this)
         return this
 
     @staticmethod
@@ -151,24 +156,21 @@ class TitanicModel(object):
     def age_ratio(this) -> object:
         age_mapping = {'Unknown': 0, 'Baby': 1, 'Child': 2, 'Teenager': 3, 'Student': 4,
                        'Young Adult': 5, 'Adult': 6, 'Senior': 7}
-        bins = [-1, 0, 5, 12, 18, 24, 35, 60, np.inf]
+        bins = [-1, 0, 5, 12, 18, 24, 35, 60, np.inf]  # scaling
         labels = ['Unknown', 'Baby', 'Child', 'Teenager', 'Student', 'Young Adult', 'Adult', 'Senior']
         for these in [this.train, this.test]:
-            these['Age'] = these['Age'].fillna(-0.5)  # 결측치(누락 데이터/NaN) 치환 처리
+            these['Age'] = these['Age'].fillna(-0.5)   # 결측치(누락 데이터/NaN) 치환 처리
             these['AgeGroup'] = pd.cut(these['Age'], bins, labels=labels)
             these['AgeGroup'] = these['AgeGroup'].map(age_mapping)
         return this
 
     @staticmethod
     def fare_ratio(this) -> object:
-        fare_mapping = {'1등급': 1, '2등급': 2, '3등급': 3, '4등급': 4}
-        labels = ['4등급', '3등급', '2등급', '1등급']
-        # these['Fare'] = these['Fare'].fillna(1)  # 결측치는 '4등급'으로
-        # these['Fare'] = these['Fare'].fillna(1)
-        for these in this.train, this.test:
+        fare_mapping = {1, 2, 3, 4}
+        # bins = [-1, 8, 15, 31, np.inf]  # np.inf: 무한대
+        for these in [this.train, this.test]:
             these['Fare'] = these['Fare'].fillna(1)
-            these['FareBand'] = pd.qcut(these['Fare'], 4, labels=labels)
-            these['FareBand'] = these['FareBand'].map(fare_mapping)
+            these['FareBand'] = pd.qcut(these['Fare'], 4, fare_mapping)  # pd.qcut(데이터, 범위, 맵핑)
         return this
 
     @staticmethod
@@ -178,3 +180,14 @@ class TitanicModel(object):
         for these in [this.train, this.test]:
             these['Embarked'] = these['Embarked'].map(embarked_mapping)
         return this
+
+    @staticmethod
+    def create_k_fold() -> object:
+        return KFold(n_splits=10, shuffle=True, random_state=0)  # shuffle=True 중복 출제 허용
+
+    @staticmethod
+    def get_accuracy(this, k_fold):
+        score = cross_val_score(RandomForestClassifier(), this.train, this.label, cv=k_fold, n_jobs=1, scoring='accuracy')
+        return round(np.mean(score)*100, 2)  # *백분률, 평균
+
+
